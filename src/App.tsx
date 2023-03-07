@@ -4,8 +4,16 @@ import "./App.css";
 import { ThemeProvider } from "styled-components";
 import { Theme } from "./styles/Themes";
 import { Button } from "./components/Button";
+import axiosBaseConfig from "./services/helpers/axios-config";
+import { useAircrafts } from "./services/apis/aircrafts/hooks";
+
+axiosBaseConfig();
 
 function App() {
+  const { data } = useAircrafts();
+
+  console.log(data);
+
   return (
     <ThemeProvider theme={Theme}>
       <div className="App">
