@@ -1,29 +1,37 @@
-import React from "react";
-import logo from "./logo.svg";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { ThemeProvider } from "styled-components";
 import { Theme } from "./styles/Themes";
-import { Button } from "./components/Button";
 import axiosBaseConfig from "./services/helpers/axios-config";
 import { useAircrafts } from "./services/apis/aircrafts/hooks";
+import Aircrafts from "./components/Aircrafts";
+import Rotation from "./components/Rotation";
+import Flights from "./components/Flights";
+import { IAircrafts } from "./components/Aircrafts/type";
 
 axiosBaseConfig();
 
 function App() {
-  const { data } = useAircrafts();
+  const { data: AircraftsData, isLoading } = useAircrafts();
+  const [AircraftList, setAircraftList] = useState<IAircrafts[]>();
 
-  console.log(data);
+  useEffect(() => {
+    if (!isLoading) {
+      setAircraftList(AircraftsData);
+    }
+  }, [AircraftsData, isLoading])
 
   return (
     <ThemeProvider theme={Theme}>
+      <div className="header">
+        <h2>
+          4 th January 2023
+        </h2>
+      </div>
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <Button>Learn React</Button>
-        </header>
+        <Aircrafts data={AircraftList} />
+        <Rotation />
+        <Flights/>
       </div>
     </ThemeProvider>
   );
